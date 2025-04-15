@@ -304,7 +304,7 @@ export default class ScreenShot {
     }
     // 隐藏光标
     document.body.classList.add("no-cursor");
-    // 使用webrtc实现截屏
+    // // 使用webrtc实现截屏
     this.screenShot(cancelCallback, triggerCallback);
   }
 
@@ -885,6 +885,26 @@ export default class ScreenShot {
     if (this.toolController != null) {
       // 渲染截图工具栏
       this.showToolBar();
+    }
+  }
+
+  /**
+   * @desc 手动指定截图区域。
+   * https://github.com/likaia/js-screen-shot/issues/184
+   * */
+  public appointCropBoxArea(cropBoxInfo: {
+    x: number;
+    y: number;
+    w: number;
+    h: number;
+  }): void {
+    if (!this.screenShotCanvas) {
+      throw new Error("没有获取到canvas容器，请稍后在试");
+    }
+    if (this.plugInParameters.getWebRtcStatus()) {
+      this.initCropBox(cropBoxInfo);
+    } else {
+      this.initCropBox(cropBoxInfo);
     }
   }
 
