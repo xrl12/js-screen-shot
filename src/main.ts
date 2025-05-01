@@ -43,7 +43,6 @@ import { drawImgToCanvas } from "@/lib/split-methods/DrawImgToCanvas";
 export default class ScreenShot {
   // 当前实例的响应式data数据
   private readonly data: InitData;
-
   // video容器用于存放屏幕MediaStream流
   private readonly videoController: HTMLVideoElement;
   // 截图区域canvas容器
@@ -161,7 +160,6 @@ export default class ScreenShot {
     this.screenShotImageController = document.createElement("canvas");
     // 实例化响应式data
     this.data = new InitData();
-
     // 设置插件的可选参数
     this.setOptionalParameter(options);
     // 获取截图区域canvas容器(获取的同时也会为InitData中的全局变量赋值)
@@ -988,13 +986,19 @@ export default class ScreenShot {
       this.placement,
       this.position
     );
-    const containerHeight = this.screenShotContainer.height / this.dpr;
-
+    const containerHeight =
+      this.screenShotContainer.height / this.dpr -
+      this.plugInParameters.getMenuBarHeight();
+    console.log(
+      containerHeight,
+      "abcdefg",
+      this.plugInParameters.getMenuBarHeight()
+    );
     // 工具栏的位置超出截图容器时，调整工具栏位置防止超出
     if (toolLocation.mouseY > containerHeight - 64) {
       toolLocation.mouseY -= this.drawGraphPosition.height + 64;
       // 超出屏幕顶部时
-      if (toolLocation.mouseY < 0) {
+      if (toolLocation.mouseY - this.plugInParameters.getMenuBarHeight() < 0) {
         const containerHeight = parseInt(this.screenShotContainer.style.height);
         toolLocation.mouseY = containerHeight - this.fullScreenDiffHeight;
       }
@@ -1130,6 +1134,9 @@ export default class ScreenShot {
     }
     if (options?.customRightClickEvent != null) {
       this.customRightClickEvent = options.customRightClickEvent;
+    }
+    if (options?.menuBarHeight) {
+      this;
     }
   }
 
